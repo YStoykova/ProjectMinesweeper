@@ -39,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builder\MinesweeperReader.cs" />
     <Compile Include="Cell.cs" />
     <Compile Include="CellPosition.cs" />
     <Compile Include="CellResult.cs" />

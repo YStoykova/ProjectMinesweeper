@@ -8,6 +8,9 @@ namespace Minesweeper.Core
         /// </summary>
         /// <value>Position by row.</value>
         char Text { get; set; }
+        /// <summary>
+        /// Flag for mine
+        /// </summary>
         bool IsMined { get; set; }
     }
 }

@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{582922
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minesweeper.Web", "Minesweeper.Web\Minesweeper.Web.csproj", "{D74562BA-CF6A-4E56-B65B-CF17FE1A0A3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{B9C74FB1-9F00-4B8A-96EC-4BDCAC9783CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9C74FB1-9F00-4B8A-96EC-4BDCAC9783CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9C74FB1-9F00-4B8A-96EC-4BDCAC9783CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D74562BA-CF6A-4E56-B65B-CF17FE1A0A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D74562BA-CF6A-4E56-B65B-CF17FE1A0A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D74562BA-CF6A-4E56-B65B-CF17FE1A0A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D74562BA-CF6A-4E56-B65B-CF17FE1A0A3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

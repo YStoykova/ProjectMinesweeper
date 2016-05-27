@@ -19,18 +19,18 @@ namespace Minesweeper.Core
             {
                 for (int col = 0; col < minefield.GetLength(1); col++)
                 {
-                    string symbol;
+                    string text;
                     var symbolType = minefield[row, col];
                     if (symbolType == CellResult.Number)
                     {
-                        int num = neighborMines[row, col];
-                        symbol = num.ToString();
+                        int number = neighborMines[row, col];
+                        text = number.ToString();
                     }
                     else
                     {
-                        symbol = this.results[symbolType];
+                        text = this.results[symbolType];
                     }
-                    output += symbol;
+                    output += text;
                 }
                 output += Environment.NewLine;
             }

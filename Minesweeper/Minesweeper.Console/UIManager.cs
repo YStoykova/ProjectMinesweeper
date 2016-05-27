@@ -1,7 +1,6 @@
 ﻿using Minesweeper.Core;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace ConsoleMinesweeper
 {
@@ -86,19 +85,46 @@ namespace ConsoleMinesweeper
         /// </summary>
         public void DisplayResult()
         {
-            List<string> input = ReadInput();
-            MinesweeperReader reader = new MinesweeperReader();
-            reader.Result(input);
-            foreach (Minefield minefield in reader.minefields)
+            List<Minefield> minefields = new List<Minefield>();
+            Minefield minefield = null;
+
+            string input;
+            do
             {
-                int[,] neighborMines = minefield.CalculateNeighborMines();
-                Func<ICell, CellResult> converter = c => minefield.ConvertCellToTypeResult(c);
-                var result = minefield.ConvertArrayToMatrix<ICell, CellResult>(minefield.Cells, minefield.ColumnsCount, converter);
-                this.Renderer.WriteLine(String.Format("Field #{0}:", minefield.Id));
-                DrawField(result, neighborMines);
-                this.Renderer.WriteLine();
-            }   
+                input = this.InputReader.ReadLine();
+
+                if (ValidationRule.IsHeader(input))
+                {
+                    minefield = new Minefield().Create(minefields.Count + 1, input);
+                    minefields.Add(minefield);
+                }
+                else if (ValidationRule.isFooter(input))
+                {
+                    break;
+                }
+                else
+                {
+                    foreach (char c in input.ToCharArray())
+                    {
+                        if ((ValidationRule.isMine(c.ToString()) )|| (ValidationRule.isSafe(c.ToString())))
+                        {
+                            minefield.Cells.Add(Cell.Create(c));
+                        }
+                        else
+                        {
+                            DisplayError("Not valid input. Press enter to restart the game.");
+                            minefield = null;
+                            minefields.Clear();
+                            break;
+                        }
+                    }
+                }
+            }
+            while (!ValidationRule.isFooter(input));
+
+            this.fieldDrawer.DrawMinefields(minefields);
         }
+
 
         /// <summary>
         /// Displays the messages when the user quits the game.
@@ -119,72 +145,8 @@ namespace ConsoleMinesweeper
         {
             this.ValidateMessage(errorMessage);
             this.Renderer.Write(errorMessage);
-            this.WaitForKey(" Press any key to continue...");
         }
 
-        /// <summary>
-        /// Read the user input
-        /// </summary>
-        /// <returns></returns>
-        public List<string> ReadInput()
-        {
-            List<string> inputRows = new List<string>();
-
-            Regex headerMask = new Regex(ValidationRule.headerMinefield, RegexOptions.Singleline);
-            Regex footerMask = new Regex(ValidationRule.footerMinefield, RegexOptions.Singleline);
-            Regex mineMask = new Regex(ValidationRule.validMine, RegexOptions.Singleline);
-            Regex safeMask = new Regex(ValidationRule.validSafeSign.ToString());
-
-            string input;
-            do
-            {
-                input = this.InputReader.ReadLine();
-                //Validate row
-                if (headerMask.IsMatch(input))
-                {
-                    //minefield header
-                }
-                else if(footerMask.IsMatch(input))
-                {
-                    //minefields end footer
-                }
-                else
-                {
-                    foreach (char c in input)
-                    {
-                        if (mineMask.IsMatch(c.ToString()) || safeMask.IsMatch(c.ToString()))
-                        {
-                            //valid mine or safe sign
-                        }
-                        else    
-                        {
-                            DisplayError("Not valid input.");
-                        }
-                    }
-                }
-
-                inputRows.Add(input);
-            }
-            while (!footerMask.IsMatch(input));
-
-            return inputRows;
-        }
-
-        /// <summary>
-        /// Draw Minefields
-        /// </summary>
-        /// <param name="minefield"></param>
-        /// <param name="neighborMines"></param>
-        public void DrawField(CellResult[,] minefield, int[,] neighborMines)
-        {
-            if (minefield.GetLength(0) != neighborMines.GetLength(0) ||
-                minefield.GetLength(1) != neighborMines.GetLength(1))
-            {
-                throw new ArgumentException("Matrices dimensions are not equal!");
-            }
-
-            this.fieldDrawer.DrawField(minefield, neighborMines);
-        }
 
         /// <summary>
         /// Asking the user that want to continue.
@@ -192,11 +154,10 @@ namespace ConsoleMinesweeper
         /// <returns></returns>
         public bool Continue()
         {
-            this.Renderer.Write("Do you want to continue? Y/N");
+            this.Renderer.Write("Press esc to exit or continue...");
             this.Renderer.WriteLine();
-            return (this.InputReader.ReadKey().Key == ConsoleKey.Y);
-        }
-
+            return (this.InputReader.ReadKey().Key == ConsoleKey.Escape);
+        }      
         /// <summary>
         /// Wait for user input
         /// </summary>

@@ -68,16 +68,31 @@ namespace Minesweeper.Core
         /// <param name="rows"></param>
         /// <param name="columns"></param>
         /// <param name="id"></param>
-        public Minefield(int rows, int columns, int id)
+        public Minefield()
         {
-            this.RowsCount = rows;
-            this.ColumnsCount = columns;
-            this.Id = id;
-
             // Initializations
             this.Cells = new List<ICell>();
         }
 
+        /// <summary>
+        /// Create a minefiled.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public Minefield Create(int id, string input)
+        {
+            string[] value = input.Split(' ');
+
+            int rows = int.Parse(value[0].ToString());
+            int cols = int.Parse(value[1].ToString());
+
+            Minefield field = new Minefield();
+            field.RowsCount = rows;
+            field.ColumnsCount = cols;
+            field.Id = id;
+            return field;
+        }
         /// <summary>
         /// Algorithm to calculate neighbor mines for each cell.
         /// </summary>
@@ -125,7 +140,6 @@ namespace Minesweeper.Core
                     }
                 }
             }
-
             return counter;
         }
        
@@ -162,6 +176,11 @@ namespace Minesweeper.Core
             }
 
             return result;
+        }
+
+        public CellResult[,] ConvertMinefield(Minefield field)
+        {
+            return field.ConvertArrayToMatrix<ICell, CellResult>(field.Cells, field.ColumnsCount, c => field.ConvertCellToTypeResult(c));
         }
 
         /// <summary>
