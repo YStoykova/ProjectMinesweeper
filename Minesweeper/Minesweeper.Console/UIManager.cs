@@ -122,9 +122,17 @@ namespace ConsoleMinesweeper
             }
             while (!ValidationRule.isFooter(input));
 
-            this.fieldDrawer.DrawMinefields(minefields);
+            //need to create validation model
+            try
+            {
+                this.fieldDrawer.DrawMinefields(minefields);
+            }
+            catch
+            {
+                DisplayError("Not valid input. Press enter to restart the game.");
+            }
+           
         }
-
 
         /// <summary>
         /// Displays the messages when the user quits the game.
