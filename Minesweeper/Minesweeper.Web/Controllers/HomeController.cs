@@ -23,6 +23,7 @@ namespace Minesweeper.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                ModelState.Clear();
                 model.UserResult = String.Empty;
                 if (!String.IsNullOrEmpty(model.ErroMessage))
                 {

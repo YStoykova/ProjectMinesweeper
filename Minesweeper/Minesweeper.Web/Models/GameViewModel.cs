@@ -14,8 +14,17 @@ namespace Minesweeper.Web.Models
         public string UserInput { get; set; }
         public string UserResult { get; set; }
 
+
+        /// <summary>
+        /// Returns the error message
+        /// </summary>
         public string ErroMessage { get; set; }
 
+        /// <summary>
+        /// Generates the output
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public string GenerateOutput(string input)
         {
             List<Minefield> minefields = new List<Minefield>();
@@ -29,7 +38,7 @@ namespace Minesweeper.Web.Models
             {
                 if (ValidationRule.IsHeader(s))
                 {
-                    minefield = new Minefield().Create(minefields.Count + 1, s);
+                    minefield = MinefieldFactory.Create(minefields.Count + 1, s);
                     minefields.Add(minefield);
                 }
                 else if (ValidationRule.isFooter(s))
@@ -42,7 +51,7 @@ namespace Minesweeper.Web.Models
                     {
                         if ((ValidationRule.isMine(c.ToString())) || (ValidationRule.isSafe(c.ToString())))
                         {
-                            minefield.Cells.Add(Cell.Create(c));
+                            minefield.Cells.Add(CellFactory.Create(c));
                         }
                         else
                         {

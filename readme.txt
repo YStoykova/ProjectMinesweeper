@@ -27,9 +27,11 @@ To run the console application: set the Minesweeper.Console project as startup p
 Implemented design patterns:
 
 Creational: Builder (MinesweeperConverter)
+	    Factory (MinefieldFactory, CellFactory)
 Behavioral: Command (Minesweeper)
 Structural: Adapter(IRenderer: ConsoleRenderer(System.Console))
 	    Facade:  Minesweeper is Facade for UIManager, Minefield
 
 Design Principles: Dependency Inversion Principle
+
 

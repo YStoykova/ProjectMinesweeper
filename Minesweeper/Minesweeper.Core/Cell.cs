@@ -10,21 +10,5 @@
         /// The character of the current cell.
         /// </summary>
         public char Text { get; set; }
-
-        /// <summary>
-        /// Create a cell.
-        /// </summary>
-        /// <param name="c"></param>
-        /// <returns></returns>
-        public static ICell Create(char c)
-        {
-            Cell cell = new Cell();
-            cell.Text = c;
-            if (c == ValidationRule.validMineChar)
-            {
-                cell.IsMined = true;
-            }
-            return cell;        
-        }
     }
 }

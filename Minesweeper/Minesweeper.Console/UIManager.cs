@@ -95,7 +95,7 @@ namespace ConsoleMinesweeper
 
                 if (ValidationRule.IsHeader(input))
                 {
-                    minefield = new Minefield().Create(minefields.Count + 1, input);
+                    minefield = MinefieldFactory.Create(minefields.Count + 1, input);
                     minefields.Add(minefield);
                 }
                 else if (ValidationRule.isFooter(input))
@@ -108,7 +108,7 @@ namespace ConsoleMinesweeper
                     {
                         if ((ValidationRule.isMine(c.ToString()) )|| (ValidationRule.isSafe(c.ToString())))
                         {
-                            minefield.Cells.Add(Cell.Create(c));
+                            minefield.Cells.Add(CellFactory.Create(c));
                         }
                         else
                         {
