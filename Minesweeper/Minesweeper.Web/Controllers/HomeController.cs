@@ -18,10 +18,9 @@ namespace Minesweeper.Web.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("InvalidModel", "Your input is not valid");
-                return View("Index", model);
+                return View(model);
             }
-
-            if (ModelState.IsValid)
+            else
             {
                 ModelState.Clear();
                 model.UserResult = model.GenerateOutput(model.UserInput);
@@ -29,7 +28,7 @@ namespace Minesweeper.Web.Controllers
                 if (!String.IsNullOrEmpty(model.ErroMessage))
                 {
                     ModelState.AddModelError("InvalidModel", model.ErroMessage);
-                    return View("Index", model);
+                    return View(model);
                 }
             }
             return View(model);

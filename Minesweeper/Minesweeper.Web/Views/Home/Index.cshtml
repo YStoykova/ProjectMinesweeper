@@ -32,13 +32,14 @@ Sample Input:
 </pre>
         </div>
         <div class="col-md-4">
-<pre>
+            <pre>
 Sample Output:
 Field #1:
 *100
 2210
 1*10
 1110
+ 
 Field #2:
 **100
 33200
@@ -55,7 +56,7 @@ Field #2:
 
         <div class="row">
             <div class="col-md-6">
-                @Html.TextAreaFor(m => m.UserInput, 15, 25, new  { })
+                @Html.TextAreaFor(m => m.UserInput, new { @cols=24,@rows=15 })
                 <div class="btn-group" role="group" aria-label="">
                     <button type="button" id="Clear" class="btn btn-default">Clear</button>
                     <button type="submit" id="Start" class="btn btn-info">Start</button>
@@ -65,10 +66,9 @@ Field #2:
 
             @if (Model != null && Model.UserResult != null)
             {
-                <div class="col-md-6">@Html.TextAreaFor(m => m.UserResult, 15, 25, new { })</div>
+                <div class="col-md-6">@Html.TextAreaFor(m => m.UserResult, new { @cols=24,@rows=15 })</div>
             }
         </div>
-
     }
 </div>
 @section Scripts{
