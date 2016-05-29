@@ -34,4 +34,7 @@ Structural: Adapter(IRenderer: ConsoleRenderer(System.Console))
 
 Design Principles: Dependency Inversion Principle
 
+Note: 	The Input.txt file contains input samples.
+	The Output.txt file contains outputs from the input.txt file
+
 
