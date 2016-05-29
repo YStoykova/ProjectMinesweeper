@@ -46,9 +46,9 @@ namespace Minesweeper.Core
         /// </summary>
         /// <param name="field">The field.</param>
         /// <returns></returns>
-        public static bool validCellCount(Minefield field)
+        public static bool isValidCellCount(int cellsCount, int rows, int columns)
         {
-            return (field != null && (field.Cells.Count == field.RowsCount * field.ColumnsCount));
+            return cellsCount == rows * columns;
         }
     }
 }

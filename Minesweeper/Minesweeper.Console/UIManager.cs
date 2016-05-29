@@ -93,27 +93,31 @@ namespace ConsoleMinesweeper
             while (continueReading)
             {
                 input = this.InputReader.ReadLine();
-
+                //Check for header valid input
                 if (MinefieldValidator.IsHeader(input))
                 {
-                    //Validate a current minefield that the user is finish with it.
-                    if ((minefield != null) && (minefield.Cells.Count != minefield.RowsCount * minefield.ColumnsCount))
+                    //Validate cells count of the current minefield
+                    if (minefield != null && MinefieldValidator.isValidCellCount(minefield.Cells.Count, minefield.RowsCount, minefield.ColumnsCount))
                     {
                         this.Renderer.ClearCurrentLine();
                         continue;
                     }
+                    //create a new minefield and add to a list of minefields
                     minefield = MinefieldFactory.Create(minefields.Count + 1, input);
                     minefields.Add(minefield);
                 }
+                    //Check for end of user input
                 else if (MinefieldValidator.isFooter(input))
                 {
-                    if ((minefield != null) && (minefield.Cells.Count != minefield.RowsCount * minefield.ColumnsCount))
+                    //Validate cells count of the current minefield
+                    if (minefield != null && MinefieldValidator.isValidCellCount(minefield.Cells.Count, minefield.RowsCount, minefield.ColumnsCount))
                     {
                         this.Renderer.ClearCurrentLine();
                         continue;
                     }
                     else
                     {
+                        //end of user's input
                         continueReading = false;
                     }                   
                 }
@@ -137,7 +141,7 @@ namespace ConsoleMinesweeper
             {
                 DisplayError(e.Message);
             }          
-        }
+        }      
 
         /// <summary>
         /// Filling the minefield with cells.
