@@ -97,7 +97,7 @@ namespace ConsoleMinesweeper
                 if (MinefieldValidator.IsHeader(input))
                 {
                     //Validate cells count of the current minefield
-                    if (minefield != null && MinefieldValidator.isValidCellCount(minefield.Cells.Count, minefield.RowsCount, minefield.ColumnsCount))
+                    if (minefield != null && !MinefieldValidator.isValidCellCount(minefield.Cells.Count, minefield.RowsCount, minefield.ColumnsCount))
                     {
                         this.Renderer.ClearCurrentLine();
                         continue;
@@ -110,7 +110,7 @@ namespace ConsoleMinesweeper
                 else if (MinefieldValidator.isFooter(input))
                 {
                     //Validate cells count of the current minefield
-                    if (minefield != null && MinefieldValidator.isValidCellCount(minefield.Cells.Count, minefield.RowsCount, minefield.ColumnsCount))
+                    if (minefield != null && !MinefieldValidator.isValidCellCount(minefield.Cells.Count, minefield.RowsCount, minefield.ColumnsCount))
                     {
                         this.Renderer.ClearCurrentLine();
                         continue;
