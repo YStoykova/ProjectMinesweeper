@@ -11,7 +11,7 @@ namespace Minesweeper.Core
         public int Id { get; set; }
 
         /// <summary>
-        /// Exception message
+        /// Exception message for roes and columns
         /// </summary>
         private const string ValueTypesExceptionFormat = "The value - {0} for {1} count must be greater than zero!";
         
@@ -90,6 +90,7 @@ namespace Minesweeper.Core
 
         /// <summary>
         /// Calculate count of mines depends of cell position.
+        /// Eeach cell may have at most 8 adjacent cells.
         /// </summary>
         /// <param name="currentPosition"></param>
         /// <returns></returns>
@@ -134,13 +135,13 @@ namespace Minesweeper.Core
         /// <summary>
         /// Convert the two dimentional array to display source.
         /// </summary>
-        /// <typeparam name="C"></typeparam>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="C">Cell</typeparam>
+        /// <typeparam name="T">CellResult</typeparam>
         /// <param name="source">List of Cells</param>
-        /// <param name="columns">the number of columns</param>
+        /// <param name="columns">the number of columns in minefield</param>
         /// <param name="func"></param>
         /// <returns></returns>
-        public T[,] ConvertArrayToMatrix<C, T>(IList<C> source, int columns, Func<C, T> func)
+        public T[,] ConvertToResult<C, T>(IList<C> source, int columns, Func<C, T> func)
         {
             int rows = source.Count / columns;
             T[,] result = new T[rows, columns];
@@ -153,11 +154,6 @@ namespace Minesweeper.Core
             }
 
             return result;
-        }
-
-        public CellResult[,] ConvertMinefield(Minefield field)
-        {
-            return field.ConvertArrayToMatrix<ICell, CellResult>(field.Cells, field.ColumnsCount, c => field.ConvertCellToTypeResult(c));
         }
 
         /// <summary>

@@ -2,8 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+using System.Text;
 
 namespace Minesweeper.Web.Models
 {
@@ -29,19 +28,19 @@ namespace Minesweeper.Web.Models
         {
             List<Minefield> minefields = new List<Minefield>();
             Minefield minefield = null;
-            string output = string.Empty;
+            StringBuilder output = new StringBuilder();
 
-            string[] delimiter = { "\r\n" };
+            string[] delimiter = { Environment.NewLine };
             string[] words = input.Split(delimiter, StringSplitOptions.None);
 
             foreach (string s in words)
             {
-                if (ValidationRule.IsHeader(s))
+                if (MinefieldValidator.IsHeader(s))
                 {
                     minefield = MinefieldFactory.Create(minefields.Count + 1, s);
                     minefields.Add(minefield);
                 }
-                else if (ValidationRule.isFooter(s))
+                else if (MinefieldValidator.isFooter(s))
                 {
                     break;
                 }
@@ -49,31 +48,31 @@ namespace Minesweeper.Web.Models
                 {
                     foreach (char c in s.ToCharArray())
                     {
-                        if ((ValidationRule.isMine(c.ToString())) || (ValidationRule.isSafe(c.ToString())))
+                        if (CellValidator.isMineOrSafe(c.ToString()))
                         {
                             minefield.Cells.Add(CellFactory.Create(c));
                         }
                         else
                         {
                             ErroMessage = "Your input is not valid";
-                            return input;
+                            return output.ToString();
                         }
                     }
                 }
             }
             foreach (Minefield field in minefields)
             {
-                int[,] neighborMines = field.CalculateNeighborMines();
-                var result = field.ConvertMinefield(field);
                 MinesweeperConverter converter = new MinesweeperConverter();
-                converter.ConvertMinefield(result, neighborMines);
-                output += String.Format(ValidationRule.headerOutput, field.Id);
-                output += Environment.NewLine;
-                output += converter.output;
-                output += Environment.NewLine;
+                converter.ConvertMinefield(field);
+                //header
+                output.Append(String.Format(MinefieldValidator.headerOutput, field.Id));
+                output.Append(Environment.NewLine);
+                //result
+                output.Append(converter.output);
+                output.Append(Environment.NewLine);
             }
 
-            return output;
+            return output.ToString();
         }
     }
 }

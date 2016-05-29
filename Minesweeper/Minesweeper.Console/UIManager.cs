@@ -9,7 +9,7 @@ namespace ConsoleMinesweeper
         /// <summary>The drawer which handles drawing of the game console.</summary>
         private readonly MinefieldDrawer fieldDrawer;
 
-        /// <summary>The renderer used by the application.</summary>
+        /// <summary>The console renderer used by the application.</summary>
         private IRenderer renderer;
         private IRenderer Renderer
         {
@@ -29,7 +29,7 @@ namespace ConsoleMinesweeper
             }
         }
 
-        /// <summary>The user input reader.</summary>
+        /// <summary>The user console input reader.</summary>
         private IUserInputReader inputReader;
         private IUserInputReader InputReader
         {
@@ -71,13 +71,12 @@ namespace ConsoleMinesweeper
         }
 
         /// <summary>
-        /// Displays the introduction text of the game.
+        /// Displays the introduction message.
         /// </summary>
-        /// <param name="msg">The introduction message.</param>
-        public void DisplayIntro(string msg)
+        /// <param name="message">The message.</param>
+        public void DisplayIntro(string message)
         {
-            this.ValidateMessage(msg);
-            this.Renderer.Write(msg);
+            this.Renderer.Write(message);
         }
 
         /// <summary>
@@ -88,50 +87,78 @@ namespace ConsoleMinesweeper
             List<Minefield> minefields = new List<Minefield>();
             Minefield minefield = null;
 
-            string input;
-            do
+            string input = string.Empty;
+            bool continueReading = true;
+
+            while (continueReading)
             {
                 input = this.InputReader.ReadLine();
 
-                if (ValidationRule.IsHeader(input))
+                if (MinefieldValidator.IsHeader(input))
                 {
+                    //Validate a current minefield that the user is finish with it.
+                    if ((minefield != null) && (minefield.Cells.Count != minefield.RowsCount * minefield.ColumnsCount))
+                    {
+                        this.Renderer.ClearCurrentLine();
+                        continue;
+                    }
                     minefield = MinefieldFactory.Create(minefields.Count + 1, input);
                     minefields.Add(minefield);
                 }
-                else if (ValidationRule.isFooter(input))
+                else if (MinefieldValidator.isFooter(input))
                 {
-                    break;
+                    if ((minefield != null) && (minefield.Cells.Count != minefield.RowsCount * minefield.ColumnsCount))
+                    {
+                        this.Renderer.ClearCurrentLine();
+                        continue;
+                    }
+                    else
+                    {
+                        continueReading = false;
+                    }                   
                 }
                 else
                 {
-                    foreach (char c in input.ToCharArray())
+                    //validate that the signs is equal to columns
+                    if (minefield != null && minefield.ColumnsCount != input.Length)
                     {
-                        if ((ValidationRule.isMine(c.ToString()) )|| (ValidationRule.isSafe(c.ToString())))
-                        {
-                            minefield.Cells.Add(CellFactory.Create(c));
-                        }
-                        else
-                        {
-                            DisplayError("Not valid input. Press enter to restart the game.");
-                            minefield = null;
-                            minefields.Clear();
-                            break;
-                        }
+                        this.Renderer.ClearCurrentLine();
+                        continue;
                     }
+                    CreateCells(minefield, input);                    
                 }
-            }
-            while (!ValidationRule.isFooter(input));
+            }         
 
-            //need to create validation model
             try
             {
                 this.fieldDrawer.DrawMinefields(minefields);
             }
-            catch
+            catch(Exception e)
             {
-                DisplayError("Not valid input. Press enter to restart the game.");
+                DisplayError(e.Message);
+            }          
+        }
+
+        /// <summary>
+        /// Filling the minefield with cells.
+        /// </summary>
+        /// <param name="minefield">The minefield.</param>
+        /// <param name="input">The input.</param>
+        private void CreateCells(Minefield minefield, string input)
+        {
+            foreach (char c in input.ToCharArray())
+            {
+                if (CellValidator.isMineOrSafe(c.ToString()))
+                {
+                    minefield.Cells.Add(CellFactory.Create(c));
+                }
+                else
+                {
+                    //invalid input
+                    this.Renderer.ClearCurrentLine();
+                    break;
+                }
             }
-           
         }
 
         /// <summary>
@@ -140,7 +167,6 @@ namespace ConsoleMinesweeper
         /// <param name="message">The goodbye message.</param>
         public void GoodBye(string message)
         {
-            this.ValidateMessage(message);
             this.Renderer.WriteLine(message);
             this.InputReader.ReadLine();
         }
@@ -151,10 +177,8 @@ namespace ConsoleMinesweeper
         /// <param name="errorMessage">The error message to be displayed.</param>
         public void DisplayError(string errorMessage)
         {
-            this.ValidateMessage(errorMessage);
             this.Renderer.Write(errorMessage);
         }
-
 
         /// <summary>
         /// Asking the user that want to continue.
@@ -162,30 +186,13 @@ namespace ConsoleMinesweeper
         /// <returns></returns>
         public bool Continue()
         {
-            this.Renderer.Write("Press esc to exit or continue...");
-            this.Renderer.WriteLine();
-            return (this.InputReader.ReadKey().Key == ConsoleKey.Escape);
-        }      
-        /// <summary>
-        /// Wait for user input
-        /// </summary>
-        /// <param name="promptMsg"></param>
-        private void WaitForKey(string promptMsg)
-        {
-            this.Renderer.Write(promptMsg);
-            this.InputReader.WaitForKey();
-        }
-
-        /// <summary>
-        /// Validates the passed message.
-        /// </summary>
-        /// <param name="message">The message to be validated.</param>
-        private void ValidateMessage(string message)
-        {
-            if (string.IsNullOrEmpty(message))
+            this.Renderer.Write("Do you want to continue? Y/N");
+            bool continueGame = this.InputReader.ReadKey().Key == ConsoleKey.Y;
+            if (continueGame)
             {
-                throw new ArgumentException("Message can not be null or empty!");
+                this.Renderer.Write(Environment.NewLine);
             }
+            return (continueGame);
         }
     }
 }

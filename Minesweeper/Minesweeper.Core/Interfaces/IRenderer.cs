@@ -24,5 +24,18 @@ namespace Minesweeper.Core
         /// <param name="format">A composite format string.</param>
         /// <param name="args">An array of objects to write using format.</param>
         void Write(string format, params object[] args);
+
+        /// <summary>
+        /// Clears the current console line.
+        /// </summary>
+        void ClearCurrentLine();
+
+        /// <summary>
+        /// Sets the cursor position.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="top">The top.</param>
+        void SetCursorPosition(int left, int top);
+        
     }
 }

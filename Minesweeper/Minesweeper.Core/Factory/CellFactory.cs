@@ -7,18 +7,20 @@ using System.Threading.Tasks;
 namespace Minesweeper.Core
 {
     /// <summary>
-    /// Implements the Factory pattern to create new cell
+    /// 
     /// </summary>
     public class CellFactory
     {
+        /// <summary>
+        /// Creates the minefield cell.
+        /// </summary>
+        /// <param name="c">The c.</param>
+        /// <returns></returns>
         public static Cell Create(char c)
         {
             Cell cell = new Cell();
             cell.Text = c;
-            if (c == ValidationRule.validMineChar)
-            {
-                cell.IsMined = true;
-            }
+            cell.IsMined = CellValidator.isMine(cell.Text.ToString());           
             return cell;        
         }
     }

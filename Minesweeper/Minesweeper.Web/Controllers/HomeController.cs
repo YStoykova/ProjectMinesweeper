@@ -24,14 +24,13 @@ namespace Minesweeper.Web.Controllers
             if (ModelState.IsValid)
             {
                 ModelState.Clear();
-                model.UserResult = String.Empty;
+                model.UserResult = model.GenerateOutput(model.UserInput);
+
                 if (!String.IsNullOrEmpty(model.ErroMessage))
                 {
                     ModelState.AddModelError("InvalidModel", model.ErroMessage);
                     return View("Index", model);
                 }
-
-                model.UserResult = model.GenerateOutput(model.UserInput);
             }
             return View(model);
         }

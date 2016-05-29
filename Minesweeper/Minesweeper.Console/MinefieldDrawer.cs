@@ -21,9 +21,7 @@ namespace ConsoleMinesweeper
         {
             foreach (Minefield field in minefields)
             {
-                int[,] neighborMines = field.CalculateNeighborMines();
-                var result = field.ConvertMinefield(field);
-                DrawMinefield(field.Id, result, neighborMines);
+                DrawMinefield(field);
             }
         }
 
@@ -33,20 +31,14 @@ namespace ConsoleMinesweeper
         /// <param name="id"></param>
         /// <param name="result"></param>
         /// <param name="neighborMines"></param>
-        public void DrawMinefield(int id, CellResult[,] result, int[,] neighborMines)
+        public void DrawMinefield(Minefield field)
         {
-            if (result.GetLength(0) != neighborMines.GetLength(0) ||
-                result.GetLength(1) != neighborMines.GetLength(1))
-            {
-                throw new ArgumentException("Matrices dimensions are not equal!");
-            }
-
             MinesweeperConverter converter = new MinesweeperConverter();
-            converter.ConvertMinefield(result, neighborMines);
+            converter.ConvertMinefield(field);
 
-            this.renderer.WriteLine(String.Format(ValidationRule.headerOutput, id));
-            this.renderer.Write(converter.output);
+            this.renderer.WriteLine(String.Format(MinefieldValidator.headerOutput, field.Id));
+            this.renderer.Write(converter.output.ToString());
             this.renderer.WriteLine();
-        }     
+        }
     }
 }

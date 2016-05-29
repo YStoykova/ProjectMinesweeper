@@ -34,5 +34,25 @@ namespace Minesweeper.Core
         {
             Console.Write(format, args);
         }
+
+        /// <summary>
+        /// Clears the current line.
+        /// </summary>
+        public void ClearCurrentLine()
+        { 
+           Console.SetCursorPosition(0, Console.CursorTop -  1);
+           Console.Write(new string(' ', Console.WindowWidth));
+           Console.SetCursorPosition(0, Console.CursorTop - 1);
+        }
+
+        /// <summary>
+        /// Sets the cursor position.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="top">The top.</param>
+        public void SetCursorPosition(int left, int top)
+        {
+            Console.SetCursorPosition(left, top);
+        }
     }
 }

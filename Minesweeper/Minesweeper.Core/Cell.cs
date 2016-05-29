@@ -3,9 +3,10 @@
     public class Cell : ICell
     {
         /// <summary>
-        /// A boolean flag indicating if the current cell is mined.
+        /// A boolean flag indicating if the current cell is a mine.
         /// </summary>
         public bool IsMined { get; set; }
+
         /// <summary>
         /// The character of the current cell.
         /// </summary>
