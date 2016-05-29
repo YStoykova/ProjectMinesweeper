@@ -54,22 +54,30 @@ namespace Minesweeper.Web.Models
                         }
                         else
                         {
-                            ErroMessage = "Your input is not valid";
+                            ErroMessage = "Your input data is not valid.";
                             return output.ToString();
                         }
                     }
                 }
             }
-            foreach (Minefield field in minefields)
+            try
             {
-                MinesweeperConverter converter = new MinesweeperConverter();
-                converter.ConvertMinefield(field);
-                //header
-                output.Append(String.Format(MinefieldValidator.headerOutput, field.Id));
-                output.Append(Environment.NewLine);
-                //result
-                output.Append(converter.output);
-                output.Append(Environment.NewLine);
+                foreach (Minefield field in minefields)
+                {
+                    MinesweeperConverter converter = new MinesweeperConverter();
+                    converter.ConvertMinefield(field);
+                    //header
+                    output.Append(String.Format(MinefieldValidator.headerOutput, field.Id));
+                    output.Append(Environment.NewLine);
+                    //result
+                    output.Append(converter.output);
+                    output.Append(Environment.NewLine);
+                }
+            }
+            catch
+            {
+                ErroMessage = "Your input data is not valid.";
+                return output.ToString();
             }
 
             return output.ToString();
