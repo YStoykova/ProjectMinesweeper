@@ -18,9 +18,7 @@ namespace Minesweeper.Core
         /// <returns></returns>
         public static Cell Create(char c)
         {
-            Cell cell = new Cell();
-            cell.Text = c;
-            cell.IsMined = CellValidator.isMine(cell.Text.ToString());           
+            Cell cell = new Cell() { Text = c, IsMined = CellValidator.isMine(c.ToString()) };       
             return cell;        
         }
     }

@@ -9,6 +9,9 @@ namespace ConsoleMinesweeper
         /// <summary>The drawer which handles drawing of the game console.</summary>
         private readonly MinefieldDrawer fieldDrawer;
 
+        public List<Minefield> minefields = new List<Minefield>();
+        public Minefield minefield = null;
+
         /// <summary>The console renderer used by the application.</summary>
         private IRenderer renderer;
         private IRenderer Renderer
@@ -84,53 +87,15 @@ namespace ConsoleMinesweeper
         /// </summary>
         public void DisplayResult()
         {
-            List<Minefield> minefields = new List<Minefield>();
-            Minefield minefield = null;
-
+            
             string input = string.Empty;
             bool continueReading = true;
 
             while (continueReading)
             {
                 input = this.InputReader.ReadLine();
-                //Check for header valid input
-                if (MinefieldValidator.IsHeader(input))
-                {
-                    //Validate cells count of the current minefield
-                    if (minefield != null && !MinefieldValidator.isValidCellCount(minefield.Cells.Count, minefield.RowsCount, minefield.ColumnsCount))
-                    {
-                        this.Renderer.ClearCurrentLine();
-                        continue;
-                    }
-                    //create a new minefield and add to a list of minefields
-                    minefield = MinefieldFactory.Create(minefields.Count + 1, input);
-                    minefields.Add(minefield);
-                }
-                    //Check for end of user input
-                else if (MinefieldValidator.isFooter(input))
-                {
-                    //Validate cells count of the current minefield
-                    if (minefield != null && !MinefieldValidator.isValidCellCount(minefield.Cells.Count, minefield.RowsCount, minefield.ColumnsCount))
-                    {
-                        this.Renderer.ClearCurrentLine();
-                        continue;
-                    }
-                    else
-                    {
-                        //end of user's input
-                        continueReading = false;
-                    }                   
-                }
-                else
-                {
-                    //validate that the signs is equal to columns
-                    if (minefield != null && minefield.ColumnsCount != input.Length)
-                    {
-                        this.Renderer.ClearCurrentLine();
-                        continue;
-                    }
-                    CreateCells(minefield, input);                    
-                }
+
+                continueReading = ParseInput(input);
             }         
 
             try
@@ -141,6 +106,48 @@ namespace ConsoleMinesweeper
             {
                 DisplayError(e.Message);
             }          
+        }
+
+        public bool ParseInput(string input)
+        {
+            if (MinefieldValidator.IsHeader(input))
+            {
+                //Validate cells count of the current minefield
+                if (minefield != null && !MinefieldValidator.isValidCellCount(minefield.Cells.Count, minefield.RowsCount, minefield.ColumnsCount))
+                {
+                    this.Renderer.ClearCurrentLine();
+                    return true;
+                }
+                //create a new minefield and add to a list of minefields
+                minefield = MinefieldFactory.Create(minefields.Count + 1, input);
+                minefields.Add(minefield);
+            }
+            //Check for end of user input
+            else if (MinefieldValidator.isFooter(input))
+            {
+                //Validate cells count of the current minefield
+                if (minefield != null && !MinefieldValidator.isValidCellCount(minefield.Cells.Count, minefield.RowsCount, minefield.ColumnsCount))
+                {
+                    this.Renderer.ClearCurrentLine();
+                    return true;
+                }
+                else
+                {
+                    //end of user's input
+                    return false;
+                }
+            }
+            else
+            {
+                //validate that the signs is equal to columns
+                if (minefield != null && minefield.ColumnsCount != input.Length)
+                {
+                    this.Renderer.ClearCurrentLine();
+                    return true;
+                }
+                CreateCells(minefield, input);
+            }
+            return true;
         }      
 
         /// <summary>
